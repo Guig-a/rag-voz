@@ -1,8 +1,11 @@
 from fastapi import Depends, FastAPI, HTTPException
 
 from app.config import Settings, get_settings
+from app.rag import answer_question
 from app.retrieval import ingest_document, semantic_search
 from app.schemas import (
+    AskRequest,
+    AskResponse,
     IngestRequest,
     IngestResponse,
     SearchRequest,
@@ -65,6 +68,37 @@ def create_app() -> FastAPI:
                 )
                 for match in matches
             ],
+        )
+
+    @app.post("/ask", response_model=AskResponse)
+    def ask(
+        payload: AskRequest,
+        app_settings: Settings = Depends(get_settings),
+    ) -> AskResponse:
+        try:
+            result = answer_question(
+                app_settings,
+                question=payload.question,
+                limit=payload.k,
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+
+        return AskResponse(
+            question=payload.question,
+            answer=result["answer"],
+            used_chunk_ids=result["used_chunk_ids"],
+            sources=[
+                SearchResult(
+                    chunk_id=match["id"],
+                    document_id=match["document_id"],
+                    position=match["position"],
+                    content=match["content"],
+                    score=float(match["score"]),
+                )
+                for match in result["sources"]
+            ],
+            best_score=result["best_score"],
         )
 
     return app

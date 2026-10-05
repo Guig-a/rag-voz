@@ -27,3 +27,16 @@ class SearchResult(BaseModel):
 class SearchResponse(BaseModel):
     query: str
     results: list[SearchResult]
+
+
+class AskRequest(BaseModel):
+    question: str = Field(min_length=1)
+    k: int = Field(default=5, ge=1, le=20)
+
+
+class AskResponse(BaseModel):
+    question: str
+    answer: str
+    used_chunk_ids: list[int]
+    sources: list[SearchResult]
+    best_score: float | None

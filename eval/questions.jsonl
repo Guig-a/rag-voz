@@ -1,0 +1,7 @@
+{"question":"O que permite busca vetorial?","expected_answer":"PostgreSQL com pgvector permite busca vetorial","expected_chunk_hint":"PostgreSQL com pgvector permite busca vetorial"}
+{"question":"O que embeddings representam?","expected_answer":"significado","expected_chunk_hint":"Embeddings representam significado semantico de um texto"}
+{"question":"Como o corpus diz que a busca vetorial funciona?","expected_answer":"por similaridade","expected_chunk_hint":"busca vetorial por similaridade"}
+{"question":"Qual banco aparece no corpus?","expected_answer":"PostgreSQL","expected_chunk_hint":"PostgreSQL com pgvector"}
+{"question":"O corpus menciona LangGraph?","expected_answer":"__NO_ANSWER__","expected_chunk_hint":""}
+{"question":"O documento fala de LiveKit?","expected_answer":"__NO_ANSWER__","expected_chunk_hint":""}
+{"question":"Qual a capital da Franca?","expected_answer":"__NO_ANSWER__","expected_chunk_hint":""}
