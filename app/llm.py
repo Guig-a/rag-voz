@@ -17,6 +17,11 @@ Se o contexto nao bastar para responder com seguranca, responda exatamente:
 Nao invente fatos e nao use conhecimento externo.
 """.strip()
 
+VOICE_STYLE_INSTRUCTION = (
+    "A resposta sera falada em voz alta: use no maximo duas frases curtas, "
+    "sem listas, sem markdown, sem simbolos e sem citar ids de chunks."
+)
+
 TRANSIENT_LLM_MARKERS = ("429", "503", "RESOURCE_EXHAUSTED", "UNAVAILABLE")
 
 
@@ -133,8 +138,13 @@ def generate_grounded_answer(
     *,
     question: str,
     chunks: list[dict],
+    voice: bool = False,
 ) -> str:
     context = _build_context(chunks)
+    instructions = ["Responda em portugues e cite apenas o que o contexto sustenta."]
+    if voice:
+        instructions.append(VOICE_STYLE_INSTRUCTION)
+
     user_prompt = "\n".join(
         [
             "<contexto>",
@@ -145,7 +155,7 @@ def generate_grounded_answer(
             question,
             "</pergunta>",
             "",
-            "Responda em portugues e cite apenas o que o contexto sustenta.",
+            *instructions,
         ]
     )
 

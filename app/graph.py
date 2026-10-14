@@ -78,10 +78,14 @@ def _parse_grade(raw: str) -> bool:
     return False
 
 
-def build_rag_graph(settings: Settings):
+def build_rag_graph(settings: Settings, *, voice: bool = False):
     def rewrite_question(state: RAGState) -> dict:
         attempts = int(state.get("attempts", 0)) + 1
         original = state["question"]
+
+        if voice and attempts == 1:
+            logger.info("rewrite_question attempts=1 voz: usando a pergunta original")
+            return {"attempts": attempts, "rewritten_question": original}
 
         try:
             rewritten = complete(
@@ -126,12 +130,25 @@ def build_rag_graph(settings: Settings):
             )
             return {"context_is_enough": False}
 
-        raw_grade = complete(
-            settings,
-            system=GRADE_SYSTEM_PROMPT,
-            user=_grade_user_prompt(state["question"], chunks),
-            max_tokens=16,
-        )
+        if voice:
+            logger.info("grade_context suficiente=True motivo=voz_score best_score=%s", best_score)
+            return {"context_is_enough": True}
+
+        try:
+            raw_grade = complete(
+                settings,
+                system=GRADE_SYSTEM_PROMPT,
+                user=_grade_user_prompt(state["question"], chunks),
+                max_tokens=16,
+            )
+        except Exception as error:
+            logger.warning(
+                "grade_context falhou; aceitando pelo score. best_score=%s erro=%s",
+                best_score,
+                error,
+            )
+            return {"context_is_enough": True}
+
         enough = _parse_grade(raw_grade)
         logger.info(
             "grade_context suficiente=%s raw=%s best_score=%s",
@@ -146,6 +163,7 @@ def build_rag_graph(settings: Settings):
             settings,
             question=state["question"],
             chunks=state["chunks"],
+            voice=voice,
         )
         logger.info("generate ok")
         return {"answer": answer}
@@ -193,8 +211,9 @@ def run_rag_graph(
     *,
     question: str,
     limit: int | None = None,
+    voice: bool = False,
 ) -> dict:
-    compiled = build_rag_graph(settings)
+    compiled = build_rag_graph(settings, voice=voice)
     final_state = compiled.invoke(
         {
             "question": question,
