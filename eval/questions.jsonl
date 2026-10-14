@@ -2,6 +2,11 @@
 {"question":"O que embeddings representam?","expected_answer":"significado","expected_chunk_hint":"Embeddings representam significado semantico de um texto"}
 {"question":"Como o corpus diz que a busca vetorial funciona?","expected_answer":"por similaridade","expected_chunk_hint":"busca vetorial por similaridade"}
 {"question":"Qual banco aparece no corpus?","expected_answer":"PostgreSQL","expected_chunk_hint":"PostgreSQL com pgvector"}
+{"question":"Qual indice o pgvector usa para acelerar a busca?","expected_answer":"HNSW","expected_chunk_hint":"indice HNSW"}
+{"question":"Para que serve o overlap entre chunks?","expected_answer":"ideia","expected_chunk_hint":"evitar cortar uma ideia no meio"}
+{"question":"Qual a temperatura da agua para coar cafe?","expected_answer":"92","expected_chunk_hint":"entre 92 e 96 graus"}
+{"question":"Qual e o maior planeta do Sistema Solar?","expected_answer":"Jupiter","expected_chunk_hint":"Jupiter e o maior planeta"}
+{"question":"Por que Marte tem cor avermelhada?","expected_answer":"ferro","expected_chunk_hint":"oxido de ferro"}
 {"question":"O corpus menciona LangGraph?","expected_answer":"__NO_ANSWER__","expected_chunk_hint":""}
 {"question":"O documento fala de LiveKit?","expected_answer":"__NO_ANSWER__","expected_chunk_hint":""}
 {"question":"Qual a capital da Franca?","expected_answer":"__NO_ANSWER__","expected_chunk_hint":""}

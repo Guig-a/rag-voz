@@ -2,7 +2,7 @@
 name = "rag-voz"
 version = "0.1.0"
 description = "Assistente de voz com RAG construído em etapas pequenas."
-readme = "ia.md"
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "anthropic>=0.39.0,<1.0.0",
@@ -15,6 +15,11 @@ dependencies = [
   "psycopg[binary]>=3.2.0,<4.0.0",
   "sentence-transformers>=3.0.0,<4.0.0",
   "uvicorn[standard]>=0.30.0,<1.0.0",
+]
+
+[project.optional-dependencies]
+experiments = [
+  "matplotlib>=3.8.0,<4.0.0",
 ]
 
 [build-system]

@@ -1,5 +1,6 @@
 import json
 import time
+import unicodedata
 from pathlib import Path
 
 from app.config import get_settings
@@ -23,17 +24,22 @@ def load_cases() -> list[dict]:
     return cases
 
 
+def normalize(text: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", text.strip().lower())
+    return "".join(char for char in decomposed if not unicodedata.combining(char))
+
+
 def contains_expected_chunk(sources: list[dict], expected_hint: str) -> bool:
-    normalized_hint = expected_hint.strip().lower()
+    normalized_hint = normalize(expected_hint)
 
     if not normalized_hint:
         return False
 
-    return any(normalized_hint in source["content"].lower() for source in sources)
+    return any(normalized_hint in normalize(source["content"]) for source in sources)
 
 
 def answer_matches(answer: str, expected_answer: str) -> bool:
-    return expected_answer.strip().lower() in answer.strip().lower()
+    return normalize(expected_answer) in normalize(answer)
 
 
 def should_retry(error: Exception) -> bool:

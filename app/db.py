@@ -46,6 +46,13 @@ def ensure_schema(settings: Settings) -> None:
         connection.commit()
 
 
+def document_exists(settings: Settings, *, name: str) -> bool:
+    with psycopg.connect(settings.database_url) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1 FROM documents WHERE name = %s LIMIT 1;", (name,))
+            return cursor.fetchone() is not None
+
+
 def insert_document_chunks(
     settings: Settings,
     *,
