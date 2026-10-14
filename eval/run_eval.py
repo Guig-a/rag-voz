@@ -109,7 +109,11 @@ def main() -> None:
             if refused:
                 refusal_hits += 1
             status = "OK" if refused else "FALHOU"
-            print(f"[{index}] recusa esperada: {status}")
+            print(
+                f"[{index}] recusa esperada: {status} "
+                f"attempts={result.get('attempts')} "
+                f"rewritten={result.get('rewritten_question')}"
+            )
             if settings.eval_delay_seconds > 0:
                 time.sleep(settings.eval_delay_seconds)
             continue
@@ -124,6 +128,7 @@ def main() -> None:
 
         print(f"[{index}] top-k={'OK' if top_k_hit else 'FALHOU'}")
         print(f"[{index}] resposta={'OK' if matched else 'FALHOU'}")
+        print(f"[{index}] attempts={result.get('attempts')} rewritten={result.get('rewritten_question')}")
         print(f"[{index}] best_score={result['best_score']}")
         print(f"[{index}] answer={result['answer']}")
         print("---")

@@ -40,3 +40,6 @@ class AskResponse(BaseModel):
     used_chunk_ids: list[int]
     sources: list[SearchResult]
     best_score: float | None
+    rewritten_question: str
+    attempts: int
+    context_is_enough: bool

@@ -99,6 +99,9 @@ def create_app() -> FastAPI:
                 for match in result["sources"]
             ],
             best_score=result["best_score"],
+            rewritten_question=result["rewritten_question"],
+            attempts=result["attempts"],
+            context_is_enough=result["context_is_enough"],
         )
 
     return app
